@@ -1,10 +1,10 @@
 package com.creepymob.mobile.tinkoffnews.app
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import com.arellomobile.mvp.MvpAppCompatActivity
 import com.creepymob.mobile.tinkoffnews.R
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : MvpAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
