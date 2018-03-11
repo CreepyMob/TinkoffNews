@@ -2,6 +2,7 @@ package com.creepymob.mobile.tinkoffnews.presentation
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.creepymob.mobile.tinkoffnews.entity.NewsEntry
 
@@ -22,8 +23,10 @@ interface NewsView : MvpView {
 
     fun showError(exception: Throwable)
 
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun showErrorMessage(exception: Throwable)
 
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun showNewsDetails(newsEntryId: Long)
 
     fun showRefreshProgress()

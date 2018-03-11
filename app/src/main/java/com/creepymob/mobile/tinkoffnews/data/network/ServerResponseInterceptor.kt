@@ -38,7 +38,7 @@ class ServerResponseInterceptor(private val gson: Gson) : Interceptor {
         try {
             serverResponse = gson.fromJson(bodyText, ServerResponse::class.java)
         } catch (throwable: Throwable) {
-            throw ServerException("serverResponse cannot be deserialize: ${throwable.message}")
+            throw ServerException("serverResponse can't be deserialize: ${throwable.message}")
         }
         if (serverResponse.resultCode == RESULT_OK) {
             return response.newBuilder().body(ResponseBody.create(body.contentType(), serverResponse.payload.toString())).build()

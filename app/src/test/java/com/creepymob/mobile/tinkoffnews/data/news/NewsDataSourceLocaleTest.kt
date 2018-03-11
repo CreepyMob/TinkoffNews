@@ -1,10 +1,11 @@
 package com.creepymob.mobile.tinkoffnews.data.news
 
-import com.creepymob.mobile.tinkoffnews.SchedulersProviderMock
 import com.creepymob.mobile.tinkoffnews.data.database.NewsDao
-import com.creepymob.mobile.tinkoffnews.domain.SchedulersProvider
 import com.creepymob.mobile.tinkoffnews.entity.NewsEntry
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.inOrder
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import org.junit.After
 import org.junit.Before
@@ -24,20 +25,17 @@ class NewsDataSourceLocaleTest {
     private lateinit var dataSource: NewsDataSourceLocale
 
     @Mock private lateinit var newsDao: NewsDao
-    private lateinit var schedulersProvider: SchedulersProvider
     private val newsResult: List<NewsEntry> = listOf(mock(), mock(), mock())
 
     @Before
     fun setUp() {
-        schedulersProvider = spy(SchedulersProviderMock())
-        dataSource = NewsDataSourceLocale(newsDao, schedulersProvider)
+        dataSource = NewsDataSourceLocale(newsDao)
 
     }
 
     @After
     fun tearDown() {
         verifyNoMoreInteractions(newsDao)
-        verifyNoMoreInteractions(schedulersProvider)
     }
 
     @Test
@@ -48,9 +46,8 @@ class NewsDataSourceLocaleTest {
                 .assertComplete()
                 .assertValue(newsResult)
 
-        inOrder(newsDao, schedulersProvider).apply {
+        inOrder(newsDao).apply {
             verify(newsDao).getNews()
-            verify(schedulersProvider).single()
         }
     }
 
@@ -62,9 +59,8 @@ class NewsDataSourceLocaleTest {
                 .assertNoValues()
                 .assertError(NoSuchElementException::class.java)
 
-        inOrder(newsDao, schedulersProvider).apply {
+        inOrder(newsDao).apply {
             verify(newsDao).getNews()
-            verify(schedulersProvider).single()
         }
     }
 
@@ -79,8 +75,7 @@ class NewsDataSourceLocaleTest {
         dataSource.cacheNews(news).test()
                 .assertComplete()
 
-        inOrder(newsDao, schedulersProvider).apply {
-            verify(schedulersProvider).single()
+        inOrder(newsDao).apply {
             verify(newsDao).storeNews(*typedArray)
         }
     }
@@ -91,8 +86,7 @@ class NewsDataSourceLocaleTest {
         dataSource.clearCache().test()
                 .assertComplete()
 
-        inOrder(newsDao, schedulersProvider).apply {
-            verify(schedulersProvider).single()
+        inOrder(newsDao).apply {
             verify(newsDao).clear()
         }
     }

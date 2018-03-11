@@ -95,6 +95,7 @@ class NewsPresenterTest {
         }
     }
 
+
     @Test
     fun onReloadClickError() {
         val exception = mock<RuntimeException>()

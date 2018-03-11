@@ -27,4 +27,6 @@ interface AppComponent {
     }
 
     fun getNewsPresenter(): NewsPresenter
+
+    fun plusNewsDetailsComponent(newsDetailsModule: NewsDetailsModule): NewsDetailsComponent
 }

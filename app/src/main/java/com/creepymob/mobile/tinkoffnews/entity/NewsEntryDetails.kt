@@ -6,4 +6,4 @@ package com.creepymob.mobile.tinkoffnews.entity
  * Time: 17:30
  *
  */
-data class NewsEntryDetails(val id: Long)
+data class NewsEntryDetails(val id: Long, val content: String)

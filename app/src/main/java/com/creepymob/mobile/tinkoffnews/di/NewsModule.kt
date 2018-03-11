@@ -33,8 +33,8 @@ class NewsModule {
             NewsRepositoryImpl(newsDataSourceLocale, newsDataSourceRemote)
 
     @Provides
-    fun provideNewsDataSourceLocale(newsDao: NewsDao, schedulersProvider: SchedulersProvider): NewsDataSourceLocale =
-            NewsDataSourceLocale(newsDao, schedulersProvider)
+    fun provideNewsDataSourceLocale(newsDao: NewsDao): NewsDataSourceLocale =
+            NewsDataSourceLocale(newsDao)
 
     @Provides
     fun provideNewsDataSourceRemote(tinkoffApi: TinkoffApi): NewsDataSourceRemote = NewsDataSourceRemote(tinkoffApi)

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TinkoffNews</string>
+    <string name="reload">Reload</string>
+    <string name="title_news">News</string>
+    <string name="title_news_details">Details</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, cibo dolor cetero nam an. Veri inani sed an, ne volumus fastidii mel. At quod omittam usu, an nam postea tincidunt percipitur. Meis utinam legimus cu usu, has cu alii malis deserunt. Quem homero docendi in sea.</string>
 </resources>

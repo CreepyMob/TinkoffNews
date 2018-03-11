@@ -1,11 +1,9 @@
 package com.creepymob.mobile.tinkoffnews.presentation
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import com.creepymob.mobile.tinkoffnews.domain.NewsInteractor
 import com.creepymob.mobile.tinkoffnews.domain.SchedulersProvider
 import com.creepymob.mobile.tinkoffnews.entity.NewsEntry
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 
 /**
@@ -15,13 +13,10 @@ import io.reactivex.rxkotlin.addTo
  *
  */
 @InjectViewState
-class NewsPresenter(private val interactor: NewsInteractor, private val schedulers: SchedulersProvider) : MvpPresenter<NewsView>() {
-
-    private val disposable: CompositeDisposable = CompositeDisposable()
+class NewsPresenter(private val interactor: NewsInteractor, private val schedulers: SchedulersProvider) : BasePresenter<NewsView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        System.out.println("NewsPresenter onFirstViewAttach")
         load()
     }
 
@@ -61,10 +56,5 @@ class NewsPresenter(private val interactor: NewsInteractor, private val schedule
 
     fun onNewsEntryClick(newsEntry: NewsEntry) {
         viewState.showNewsDetails(newsEntry.id)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposable.dispose()
     }
 }

@@ -1,61 +1,91 @@
 package com.creepymob.mobile.tinkoffnews.app.news
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.view.View
+import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.creepymob.mobile.tinkoffnews.R
 import com.creepymob.mobile.tinkoffnews.app.App
+import com.creepymob.mobile.tinkoffnews.app.HtmlCompat
+import com.creepymob.mobile.tinkoffnews.app.news.details.NewsDetailsActivity
 import com.creepymob.mobile.tinkoffnews.entity.NewsEntry
 import com.creepymob.mobile.tinkoffnews.presentation.NewsPresenter
 import com.creepymob.mobile.tinkoffnews.presentation.NewsView
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.include_toolbar.*
 
 class NewsActivity : MvpAppCompatActivity(), NewsView {
 
     @InjectPresenter
     lateinit var presenter: NewsPresenter
 
+    private lateinit var adapter: NewsAdapter
+
     @ProvidePresenter
-    fun provideNewsPresenter(): NewsPresenter{
-        System.out.println("provideNewsPresenter")
-        return App.component.getNewsPresenter()
-    }
+    fun provideNewsPresenter(): NewsPresenter = App.component.getNewsPresenter()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        System.out.println("onCreate")
+
+        adapter = NewsAdapter(HtmlCompat)
+                .apply {
+                    onNewsEntryClickListener = { presenter.onNewsEntryClick(it) }
+                }
+
+        toolbar.title = getString(R.string.title_news)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+        swipeRefreshLayout.setOnRefreshListener {
+            presenter.onRefreshClick()
+        }
+
+        btnReload.setOnClickListener {
+            presenter.onReloadClick()
+        }
     }
 
     override fun showNews(news: List<NewsEntry>) {
-        System.out.println("showNews: ${news.joinToString("\n")}")
+        swipeRefreshLayout.visibility = View.VISIBLE
+        errorHolder.visibility = View.GONE
+
+        recyclerView.post {
+            adapter.content = news
+        }
     }
 
     override fun showProgress() {
-        System.out.println("showProgress")
+        progressBar.show()
     }
 
     override fun hideProgress() {
-        System.out.println("hideProgress")
+        progressBar.hide()
     }
 
     override fun showError(exception: Throwable) {
-        System.out.println("showError: $exception")
+        errorMessage.text = exception.message
+        errorHolder.visibility = View.VISIBLE
+        swipeRefreshLayout.visibility = View.GONE
     }
 
     override fun showErrorMessage(exception: Throwable) {
-        System.out.println("showErrorMessage: $exception")
+        Toast.makeText(this, "refresh error: ${exception.message}", Toast.LENGTH_SHORT).show()
     }
 
     override fun showNewsDetails(newsEntryId: Long) {
-        System.out.println("showNewsDetails: $newsEntryId")
+        NewsDetailsActivity.start(this, newsEntryId)
     }
 
     override fun showRefreshProgress() {
-        System.out.println("showRefreshProgress:")
+        swipeRefreshLayout.isRefreshing = true
     }
 
     override fun hideRefreshProgress() {
-        System.out.println("hideRefreshProgress:")
+        swipeRefreshLayout.isRefreshing = false
     }
 }
