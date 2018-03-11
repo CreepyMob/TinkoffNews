@@ -38,6 +38,7 @@ class NewsActivity : MvpAppCompatActivity(), NewsView {
                 }
 
         toolbar.title = getString(R.string.title_news)
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         swipeRefreshLayout.setOnRefreshListener {
@@ -49,17 +50,12 @@ class NewsActivity : MvpAppCompatActivity(), NewsView {
         }
     }
 
+
     override fun showNews(news: List<NewsEntry>) {
         swipeRefreshLayout.visibility = View.VISIBLE
         errorHolder.visibility = View.GONE
 
-        recyclerView.post {
-            adapter.content = news
-
-            if(recyclerView.adapter == null){
-                recyclerView.adapter = adapter
-            }
-        }
+        adapter.content = news
     }
 
     override fun showProgress() {
