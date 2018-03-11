@@ -39,7 +39,6 @@ class NewsActivity : MvpAppCompatActivity(), NewsView {
 
         toolbar.title = getString(R.string.title_news)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
 
         swipeRefreshLayout.setOnRefreshListener {
             presenter.onRefreshClick()
@@ -56,6 +55,10 @@ class NewsActivity : MvpAppCompatActivity(), NewsView {
 
         recyclerView.post {
             adapter.content = news
+
+            if(recyclerView.adapter == null){
+                recyclerView.adapter = adapter
+            }
         }
     }
 
